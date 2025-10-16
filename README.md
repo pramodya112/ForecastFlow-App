@@ -1,5 +1,7 @@
-g width="1349" height="600" alt="image" src="https://github.com/user-attachments/assets/b92aa5a2-27cc-4dee-851c-115dec79f0ad" />🌤️ Weather Forecast App
 
+![Uploading image.png…]()
+
+🌤️ Weather Forecast App
 A modern, responsive weather forecast application built with ASP.NET Core Razor Pages that provides real-time weather information for cities worldwide.
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-blue)
