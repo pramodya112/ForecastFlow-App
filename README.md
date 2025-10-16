@@ -1,7 +1,8 @@
 
 ![Uploading image.png…]()
 
-🌤️ Weather Forecast App
+🌤️ ForecastFlow
+
 A modern, responsive weather forecast application built with ASP.NET Core Razor Pages that provides real-time weather information for cities worldwide.
 
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-8.0-blue)
