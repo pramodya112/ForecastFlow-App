@@ -1,0 +1,8 @@
+# Visual Studio solution files and configuration
+.vs/
+*.suo
+*.user
+
+# Project binaries and object files
+[Bb]in/
+[Oo]bj/

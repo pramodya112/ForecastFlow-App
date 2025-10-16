@@ -1,0 +1,251 @@
+﻿@page
+@model WeatherApp.Pages.IndexModel
+@using WeatherApp.Models
+
+@{
+    ViewData["Title"] = "Weather Forecast";
+}
+
+<style>
+    :root {
+        --primary-blue: #4A90E2;
+        --dark-blue: #2C5F8D;
+        --light-blue: #E3F2FD;
+        --success-green: #4CAF50;
+        --danger-red: #F44336;
+        --text-dark: #2C3E50;
+        --text-light: #7F8C8D;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .weather-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+
+    .weather-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .app-title {
+        color: var(--dark-blue);
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .app-subtitle {
+        color: var(--text-light);
+        font-size: 1.1rem;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .search-form {
+        margin-bottom: 30px;
+    }
+
+    .search-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 18px 20px;
+        border: 2px solid #E0E0E0;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        }
+
+    .search-btn {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+    .alert {
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 25px;
+        animation: slideIn 0.4s ease;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #FF6B6B 0%, #EE5A6F 100%);
+        color: white;
+        border: none;
+    }
+
+    .weather-result {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 35px;
+        color: white;
+        margin-top: 25px;
+        animation: slideIn 0.4s ease;
+    }
+
+    .weather-city {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        text-align: center;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .weather-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .weather-item {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+        .weather-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+
+    .weather-icon {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .weather-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+
+    .weather-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .weather-card {
+            padding: 25px;
+        }
+
+        .app-title {
+            font-size: 2rem;
+        }
+
+        .weather-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="weather-container">
+    <div class="weather-card">
+        <h1 class="app-title">🌤️ Weather Forecast</h1>
+        <p class="app-subtitle">Search for current weather conditions in any city</p>
+
+        <form method="post" class="search-form">
+            <div class="search-group">
+                <input type="text"
+                       id="city"
+                       name="city"
+                       class="search-input"
+                       placeholder="Enter city name (e.g., London, Tokyo, New York)"
+                       required
+                       autocomplete="off" />
+            </div>
+            <button type="submit" class="search-btn">Get Weather</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(Model.Weather.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <strong>⚠️ Error:</strong> @Model.Weather.ErrorMessage
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.Weather.City))
+        {
+            <div class="weather-result">
+                <h2 class="weather-city">📍 @Model.Weather.City</h2>
+
+                <div class="weather-grid">
+                    <div class="weather-item">
+                        <div class="weather-icon">🌡️</div>
+                        <div class="weather-label">Temperature</div>
+                        <div class="weather-value">@Model.Weather.Temperature.ToString("F1")°C</div>
+                    </div>
+
+                    <div class="weather-item">
+                        <div class="weather-icon">💧</div>
+                        <div class="weather-label">Humidity</div>
+                        <div class="weather-value">@Model.Weather.Humidity%</div>
+                    </div>
+
+                    <div class="weather-item">
+                        <div class="weather-icon">💨</div>
+                        <div class="weather-label">Wind Speed</div>
+                        <div class="weather-value">@Model.Weather.WindSpeed.ToString("F1") m/s</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
